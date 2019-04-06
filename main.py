@@ -17,7 +17,7 @@ class Board:
     def __init__(self, width, height):
         self.width = width
         self.height = height
-        self.board = self.get_random_board()
+        self.seed = self.get_random_board()
 
     def get_random_board(self):
         """
@@ -48,12 +48,47 @@ class Board:
         #  an in between renders '*' + row cells + '*'
         #  for each row on the board
         print('*'*(self.width+2))
-        for row in self.board:
+        for row in self.seed:
             print(''.join(['*']+['#' if cell else ' ' for cell in row]+['*']))
         print('*'*(self.width+2))
 
     def get_next_state(self):
-        pass
+        """
+        """
+
+        # this gets all neighboring cells of the given
+        #  cell coordinates so that the next cell state
+        #  can be updated given the states of its
+        #  neighbors
+        def get_cell_neighbors(cell_coordinates, neighbors=[]):
+
+            pass
+
+        # this helper function gets an updated cell
+        #  value given its neighboring cell coords
+        def get_updated_cell(cell, neighbors):
+
+            # this counts live neighbors
+            live = 0
+            for neighbor in neighbors:
+                row, column = neighbor
+                if self.seed[row][column]:
+                    live += 1
+
+            # this applies rules to get whether cell
+            #  is live or dead in next state, conditioned
+            #  on its current status (live or dead)
+            if cell:
+                if live < 2:    # dies by underpopulation
+                    return 0
+                if live <= 3:   # lives to next generation
+                    return 1
+                if live > 3:    # dies by overpopulation
+                    return 0        
+        
+            else:
+                if live == 3:   # lives by reproduction 
+                    return 1
 
 if __name__ == "__main__":
 
