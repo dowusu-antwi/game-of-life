@@ -30,7 +30,19 @@ class Test(unittest.TestCase):
     # This tests whether a random board is printed
     #  correctly
     def test_03(self):
-        raise NotImplementedError()
+        b = main.Board(5,5)
+        r = b.get_random_board()
+        r_height = len(r)
+        e_height = 5
+        self.assertEqual(r_height, e_height)
+
+        all_cells_valid = True
+        for row in r:
+            for col in row:
+                if col not in [0,1]:
+                    all_cells_valid = False
+                    break
+        self.assertTrue(all_cells_valid,("cell %s is not valid" % col))
 
     # These test whether the next state has been
     #  calculated correctly given the initial state
