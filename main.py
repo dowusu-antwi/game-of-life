@@ -11,6 +11,7 @@ author: dowusu-antwi
 """
 
 import random
+import time
 
 class Board:
 
@@ -62,7 +63,6 @@ class Board:
         (row, col) = coordinates
         return ((row >= 0 and row < self.height) and
                 (col >= 0 and col < self.width))
-        
 
     def get_next_state(self):
         """
@@ -174,7 +174,22 @@ class Board:
 
         return next_state
 
+    # this will run an infinite game of life
+    def play_game(self):
+        while True:
+            self.render_board()
+            time.sleep(0.3)
+            self.seed = self.get_next_state()
+
 if __name__ == "__main__":
 
-    b = Board(5,5)
-    b.render_board()
+    b = Board(6,6)
+    b.play_game()
+
+    toad = [[0,0,0,0,0,0],
+            [0,0,0,0,0,0],
+            [0,0,1,1,1,0],
+            [0,1,1,1,0,0],
+            [0,0,0,0,0,0],
+            [0,0,0,0,0,0]]
+

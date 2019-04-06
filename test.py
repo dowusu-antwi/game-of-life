@@ -90,5 +90,16 @@ class Test(unittest.TestCase):
              [0,0,0]]
         self.assertEqual(r,e)
 
+    def test_08(self):
+        b = main.Board(3,3)
+        b.seed = [[0,0,0],
+                  [0,0,0],
+                  [0,0,0]]
+        r = b.get_next_state()
+        e = [[0,0,0],
+             [0,0,0],
+             [0,0,0]]
+        self.assertEqual(r,e)
+
 if __name__ == "__main__":
     result = unittest.main(verbosity=3, exit=False)
