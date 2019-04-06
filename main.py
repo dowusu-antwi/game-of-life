@@ -82,7 +82,13 @@ class Board:
         #
         # (recursive solution is more efficient and makes
         #  higher dimensions easy to integrate...!)
-        def get_cell_neighbors(coordinates, neighbors=[]):
+        def get_cell_neighbors(coordinates, neighbors=[], original_coordinates=None):
+
+            # this keeps track of original coordinates so
+            #  that it can be removed from neighbors at the end,
+            #  since we will not consider a cell its own neighbor
+            if not original_coordinates:
+                original_coordinates = coordinates
 
             # BC: no coordinates remain
             if coordinates == ():
@@ -93,6 +99,10 @@ class Board:
                     if self.coordinates_in_bounds(neighbor):
                         neighbors_in_bounds.append(neighbor)
 
+                # this removes the original coordinates (since
+                #  a cell is not its own neighbor)
+                if neighbors_in_bounds:
+                    neighbors_in_bounds.remove(original_coordinates)
                 return neighbors_in_bounds
 
             # Recursive: iterates over neighbors and
@@ -107,7 +117,8 @@ class Board:
                 # the first set of neighbors has already been
                 #  generated, if neighbors is currently empty
                 if not neighbors:
-                    return get_cell_neighbors(other_coords, first_neighbors)
+                    return get_cell_neighbors(other_coords, first_neighbors,
+                                              original_coordinates)
 
                 # otherwise, iterates over current neighbors
                 #  and gets new neighbors from them by adding
@@ -118,7 +129,8 @@ class Board:
                     for neighbor in neighbors:
                         new_neighbors.extend([neighbor + new_coord
                                               for new_coord in first_neighbors])
-                    return get_cell_neighbors(other_coords, new_neighbors)
+                    return get_cell_neighbors(other_coords, new_neighbors,
+                                              original_coordinates)
 
         # this helper function gets an updated cell
         #  value given its neighboring cell coords
@@ -141,19 +153,19 @@ class Board:
                     return 1
                 if live > 3:    # dies by overpopulation
                     return 0        
-        
+ 
             else:
                 if live == 3:   # lives by reproduction 
                     return 1
+            return cell
 
         # this generates an empty (dead) board and
         #  for each cell, gets the updated cell status
         #  and updates the empty board, then returns it
         next_state = self.get_dead_board()
         for row, row_of_cells in enumerate(self.seed):
-            for col in row_of_cells:
+            for col, cell in enumerate(row_of_cells):
                 coordinates = (row, col)
-                cell = self.seed[row][col]
 
                 neighbors = get_cell_neighbors(coordinates)
                 updated_cell = get_updated_cell(cell, neighbors)

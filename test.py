@@ -48,7 +48,7 @@ class Test(unittest.TestCase):
     #  calculated correctly given the initial state
     def test_04(self):
         b = main.Board(3,3)
-        b.board = [[0,0,0],
+        b.seed = [[0,0,0],
                    [0,0,1],
                    [0,0,0]]
         r = b.get_next_state()
@@ -59,18 +59,18 @@ class Test(unittest.TestCase):
 
     def test_05(self):
         b = main.Board(3,3)
-        b.board = [[1,1,1],
+        b.seed = [[1,1,1],
                    [1,1,1],
                    [1,1,1]]
         r = b.get_next_state()
-        e = [[0,0,0],
+        e = [[1,0,1],
              [0,0,0],
-             [0,0,0]]
+             [1,0,1]]
         self.assertEqual(r,e)
 
     def test_06(self):
         b = main.Board(3,3)
-        b.board = [[1,0,1],
+        b.seed = [[1,0,1],
                    [0,0,0],
                    [1,0,1]]
         r = b.get_next_state()
@@ -81,7 +81,7 @@ class Test(unittest.TestCase):
 
     def test_07(self):
         b = main.Board(3,3)
-        b.board = [[1,1,0],
+        b.seed = [[1,1,0],
                    [1,0,0],
                    [0,0,0]]
         r = b.get_next_state()
