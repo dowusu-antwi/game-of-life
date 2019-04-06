@@ -15,6 +15,7 @@ import random
 class Board:
 
     def __init__(self, width, height):
+        self.dimensions = [height, width]
         self.width = width
         self.height = height
         self.seed = self.get_random_board()
@@ -52,17 +53,72 @@ class Board:
             print(''.join(['*']+['#' if cell else ' ' for cell in row]+['*']))
         print('*'*(self.width+2))
 
+    def coordinates_in_bounds(self, coordinates):
+        """
+        This checks if given coordinates are in the
+         boundaries of the board
+        """
+
+        (row, col) = coordinates
+        return ((row >= 0 and row < self.height) and
+                (col >= 0 and col < self.width))
+        
+
     def get_next_state(self):
         """
+        This will look at the current state of the board
+         and update each cell according to Conway's rules:
+
+        1. live cell with < 2 live neighbours dies          -> underpopulation.
+        2. live cell with > 3 live neighbours dies          -> overpopulation.
+        3. live cell with 2 or 3 live neighbours survives
+        4. dead cell with == 3 live neighbours becomes live -> reproduction.
         """
 
         # this gets all neighboring cells of the given
         #  cell coordinates so that the next cell state
         #  can be updated given the states of its
-        #  neighbors
-        def get_cell_neighbors(cell_coordinates, neighbors=[]):
+        #  neighbors, recursively
+        #
+        # (recursive solution is more efficient and makes
+        #  higher dimensions easy to integrate...!)
+        def get_cell_neighbors(coordinates, neighbors=[]):
 
-            pass
+            # BC: no coordinates remain
+            if coordinates == ():
+                # this eliminates all out of bounds cells
+                #  before returning it
+                neighbors_in_bounds = []
+                for neighbor in neighbors:
+                    if self.coordinates_in_bounds(neighbor):
+                        neighbors_in_bounds.append(neighbor)
+
+                return neighbors_in_bounds
+
+            # Recursive: iterates over neighbors and
+            #  returns new list
+            else:
+                first_coord = coordinates[0]
+                other_coords = coordinates[1:]
+                first_neighbors = [(first_coord-1,),
+                                   (first_coord,),
+                                   (first_coord+1,)]
+
+                # the first set of neighbors has already been
+                #  generated, if neighbors is currently empty
+                if not neighbors:
+                    return get_cell_neighbors(other_coords, first_neighbors)
+
+                # otherwise, iterates over current neighbors
+                #  and gets new neighbors from them by adding
+                #  on coordinate neighbors of the coordinate
+                #  in focus
+                else:
+                    new_neighbors = []
+                    for neighbor in neighbors:
+                        new_neighbors.extend([neighbor + new_coord
+                                              for new_coord in first_neighbors])
+                    return get_cell_neighbors(other_coords, new_neighbors)
 
         # this helper function gets an updated cell
         #  value given its neighboring cell coords
@@ -89,6 +145,22 @@ class Board:
             else:
                 if live == 3:   # lives by reproduction 
                     return 1
+
+        # this generates an empty (dead) board and
+        #  for each cell, gets the updated cell status
+        #  and updates the empty board, then returns it
+        next_state = self.get_dead_board()
+        for row, row_of_cells in enumerate(self.seed):
+            for col in row_of_cells:
+                coordinates = (row, col)
+                cell = self.seed[row][col]
+
+                neighbors = get_cell_neighbors(coordinates)
+                updated_cell = get_updated_cell(cell, neighbors)
+
+                next_state[row][col] = updated_cell
+
+        return next_state
 
 if __name__ == "__main__":
 

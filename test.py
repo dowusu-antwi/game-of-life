@@ -47,16 +47,48 @@ class Test(unittest.TestCase):
     # These test whether the next state has been
     #  calculated correctly given the initial state
     def test_04(self):
-        raise NotImplementedError()
+        b = main.Board(3,3)
+        b.board = [[0,0,0],
+                   [0,0,1],
+                   [0,0,0]]
+        r = b.get_next_state()
+        e = [[0,0,0],
+             [0,0,0],
+             [0,0,0]]
+        self.assertEqual(r,e)
 
     def test_05(self):
-        raise NotImplementedError()
+        b = main.Board(3,3)
+        b.board = [[1,1,1],
+                   [1,1,1],
+                   [1,1,1]]
+        r = b.get_next_state()
+        e = [[0,0,0],
+             [0,0,0],
+             [0,0,0]]
+        self.assertEqual(r,e)
 
     def test_06(self):
-        raise NotImplementedError()
+        b = main.Board(3,3)
+        b.board = [[1,0,1],
+                   [0,0,0],
+                   [1,0,1]]
+        r = b.get_next_state()
+        e = [[0,0,0],
+             [0,0,0],
+             [0,0,0]]
+        self.assertEqual(r,e)
 
     def test_07(self):
-        raise NotImplementedError()
+        b = main.Board(3,3)
+        b.board = [[1,1,0],
+                   [1,0,0],
+                   [0,0,0]]
+        r = b.get_next_state()
+        e = [[1,1,0],
+             [1,1,0],
+             [0,0,0]]
+        self.assertEqual(r,e)
 
 if __name__ == "__main__":
     result = unittest.main(verbosity=3, exit=False)
