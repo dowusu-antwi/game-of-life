@@ -37,12 +37,25 @@ class Board:
         return [[0 for x in range(self.width)]
                 for x in range(self.height)]
 
-    def print_board(self):
-        pass
+    def render_board(self):
+        """
+        This renders the board, treating alives (1)
+         as hashes (#) and deads (0) as spaces, and
+         uses asterisks for the boundary
+        """
+
+        # this prints the top and bottom boundaries,
+        #  an in between renders '*' + row cells + '*'
+        #  for each row on the board
+        print('*'*(self.width+2))
+        for row in self.board:
+            print(''.join(['*']+['#' if cell else ' ' for cell in row]+['*']))
+        print('*'*(self.width+2))
 
     def get_next_state(self):
         pass
 
 if __name__ == "__main__":
 
-   pass 
+    b = Board(5,5)
+    b.render_board()
