@@ -15,11 +15,18 @@ import time
 
 class Board:
 
-    def __init__(self, width, height):
+    def __init__(self, width, height, initial_seed=None):
         self.dimensions = [height, width]
         self.width = width
         self.height = height
-        self.seed = self.get_random_board()
+
+        # if initial seed given, sets to seed attribute
+        #  and otherwise generates random seed
+        # assumes width, height parameters are correct
+        if initial_seed:
+            self.seed = initial_seed
+        else:
+            self.seed = self.get_random_board()
 
     def get_random_board(self):
         """
@@ -183,13 +190,27 @@ class Board:
 
 if __name__ == "__main__":
 
-    b = Board(6,6)
-    b.play_game()
-
+    """
     toad = [[0,0,0,0,0,0],
             [0,0,0,0,0,0],
             [0,0,1,1,1,0],
             [0,1,1,1,0,0],
             [0,0,0,0,0,0],
             [0,0,0,0,0,0]]
+    b = Board(6,6,toad)
+    b.play_game()
+    """
 
+    glider = [[1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+              [0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+              [0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+              [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+              [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+              [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+              [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+              [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+              [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+              [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+              [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]]
+    b = Board(31,11,glider)
+    b.play_game()
