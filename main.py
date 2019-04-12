@@ -39,6 +39,15 @@ class Board:
         else:
             self.seed = self.get_random_board()
 
+    def in_bounds(self, point):
+        """
+        This returns True if given point is in board
+         boundaries, False otherwise
+        """
+        row,col = point
+        return ((row>0 and row<self.height) and
+                (col>0 and col<self.width))
+
     def get_random_board(self):
         """
         This returns a board of dimensions given by
@@ -59,10 +68,10 @@ class Board:
 
     def add_pattern(self, pattern, location):
         """
-        This will add the given pattern to the given
+        This will add the given pattern anchored at the
          location on the board
         """
-        
+       pass 
 
     def render_board(self):
         """
