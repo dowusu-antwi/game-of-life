@@ -10,7 +10,8 @@ Author: dowusu
 """
 
 import sys
-from PyQt4 import QtGui
+import random
+from PyQt4 import QtGui,QtCore
 
 class App(QtGui.QMainWindow):
     """
@@ -21,10 +22,11 @@ class App(QtGui.QMainWindow):
         self.app = QtGui.QApplication(sys.argv)
         super(App,self).__init__()
         self.setWindowTitle("Game of Life")
-        self.resize_window(width, height)
+        self.resizeWindow(width, height)
         self.show()
+#        self.update()
 
-    def resize_window(self, width, height):
+    def resizeWindow(self, width, height):
         """
         This changes the window dimensions
         """
@@ -53,10 +55,25 @@ class App(QtGui.QMainWindow):
         """
         This draws rectangles to the screen.
         """
-        painter.drawRect(0,0,100,100)
-        painter.drawRect(100,100,100,100)
+        num = random.random()
+        print(num)
+        if num < 0.5:
+            painter.drawRect(0,0,100,100)
+        else:
+            painter.drawRect(100,100,100,100)
+
+    def update(self):
+        """
+        This updates the GUI based on a timer.
+        """
+        timer = QtCore.QTimer()
+        timer.timeout.connect(self.drawRectangles)
+        timer.start(1000)
 
 if __name__ == "__main__":
 
     new_widget = App(500, 250)
+    timer = QtCore.QTimer()
+    timer.timeout.connect(new_widget.drawRectangles)
+    timer.start(1000)
     sys.exit(new_widget.app.exec_())
