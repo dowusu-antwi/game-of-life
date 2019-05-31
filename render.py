@@ -1,17 +1,34 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python2
 
 """
-With PyQt, this will take grids from
-  main.py and render a grid of rectangles
-  to the screen.
+Game of Life Renderer
+Author: dowusu
+
+ This will open a PyQt window and draw rectangles
+  to the screen representing the cells of the game
+  of life.
 """
 
-import PyQt4
+import sys
+from PyQt4 import QtGui
 
-## 1. Initialize and open PyQt window
-## 2. Draw rectangle to screen
-## 3. Change rectangle color
+class App(QtGui.QMainWindow):
+    """
+    This is the main widget class
+    """
+
+    def __init__(self):
+        self.app = QtGui.QApplication(sys.argv)
+        super(App,self).__init__()
+        self.create_window()
+        self.show()
+
+    def create_window(self):
+        self.setWindowTitle("Game of Life")
+        self.setGeometry(0,0,100,100)
+
 
 if __name__ == "__main__":
-    pass
 
+    new_widget = App()
+    sys.exit(new_widget.app.exec_())
