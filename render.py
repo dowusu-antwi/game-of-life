@@ -27,8 +27,8 @@ class App(QtGui.QWidget):
         self.resize_window(width, height)
         self.timer = self.setup_timer()
 
-        board_width, board_height = (15, 15)
-        self.board = main.Board(board_width, board_height, "pulsar", (1,1))
+        board_width, board_height = (30, 30)
+        self.board = main.Board(board_width, board_height)
         self.pixel_width, self.pixel_height = (width/board_width, height/board_height)
 
         self.show()
@@ -36,7 +36,7 @@ class App(QtGui.QWidget):
     def setup_timer(self):
         timer = QtCore.QTimer()
         timer.timeout.connect(self.update)
-        timer.start(500)
+        timer.start(100)
         return timer
         
     def resize_window(self, width, height):
@@ -73,9 +73,9 @@ class App(QtGui.QWidget):
                 x = row*self.pixel_width
                 y = col*self.pixel_height
                 if __:
-                    painter.setBrush(QtGui.QColor(200,0,0))
+                    painter.setBrush(QtGui.QColor(100,0,0))
                 else:
-                    painter.setBrush(QtGui.QColor(0,0,200))
+                    painter.setBrush(QtGui.QColor(0,0,100))
                 painter.drawRect(x, y, self.pixel_width, self.pixel_height)
 
         self.board.seed = self.board.get_next_state()
@@ -90,5 +90,5 @@ class App(QtGui.QWidget):
 
 if __name__ == "__main__":
 
-    new_widget = App([450, 450])
+    new_widget = App([900, 900])
     sys.exit(new_widget.app.exec_())
