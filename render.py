@@ -72,7 +72,7 @@ class App(QtGui.QWidget):
 
     def tick(self):
         print("tick")
-        self.repaint()
+        self.update()
 
 if __name__ == "__main__":
 
