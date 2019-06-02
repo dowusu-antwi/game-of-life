@@ -10,7 +10,7 @@ Author: dowusu
 """
 
 import sys
-import gen
+import main
 from PyQt4 import QtGui,QtCore
 
 class App(QtGui.QWidget):
@@ -18,19 +18,25 @@ class App(QtGui.QWidget):
     This is the main widget class
     """
 
-    def __init__(self, width, height):
+    def __init__(self, window_dim):
         self.app = QtGui.QApplication(sys.argv)
         super(App,self).__init__()
+
         self.setWindowTitle("Game of Life")
+        width,height = window_dim
         self.resize_window(width, height)
         self.timer = self.setup_timer()
-        self.rectangle_counter = gen.gen()
+
+        board_width, board_height = (15, 15)
+        self.board = main.Board(board_width, board_height, "pulsar", (1,1))
+        self.pixel_width, self.pixel_height = (width/board_width, height/board_height)
+
         self.show()
 
     def setup_timer(self):
         timer = QtCore.QTimer()
         timer.timeout.connect(self.update)
-        timer.start(50)
+        timer.start(500)
         return timer
         
     def resize_window(self, width, height):
@@ -47,36 +53,42 @@ class App(QtGui.QWidget):
 
         painter = QtGui.QPainter()
         painter.begin(self)
-        self.drawObjects(painter)
+        self.draw_objects(painter)
         painter.end()
 
-    def drawRectangles(self, painter):
+    def draw_rectangles(self, painter):
         """
         This draws rectangles to the screen.
         """
 
-        counter = next(self.rectangle_counter)
-        print(counter)
-        if counter:
-            painter.drawRect(0,0,100,100)
-        else:
-            painter.drawRect(100,100,100,100)
+        # this will get current board to render,
+        #  and draw rectangles to render it, then
+        #  it will calculate the next board and
+        #  reset it
 
-    def drawObjects(self, painter):
+        current_board = self.board.seed
+
+        for row,_ in enumerate(current_board):
+            for col,__ in enumerate(_):
+                x = row*self.pixel_width
+                y = col*self.pixel_height
+                if __:
+                    painter.setBrush(QtGui.QColor(200,0,0))
+                else:
+                    painter.setBrush(QtGui.QColor(0,0,200))
+                painter.drawRect(x, y, self.pixel_width, self.pixel_height)
+
+        self.board.seed = self.board.get_next_state()
+
+    def draw_objects(self, painter):
         """
         This will draw any objects necessary to
          the screen.
         """
 
-        self.drawRectangles(painter)
+        self.draw_rectangles(painter)
 
 if __name__ == "__main__":
 
-    new_widget = App(500, 250)
-
-    """
-    timer = QtCore.QTimer()
-    timer.timeout.connect(new_widget.tick)
-    timer.start(1000)
-    """ 
+    new_widget = App([450, 450])
     sys.exit(new_widget.app.exec_())
