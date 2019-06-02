@@ -11,9 +11,10 @@ Author: dowusu
 
 import sys
 import random
+import time
 from PyQt4 import QtGui,QtCore
 
-class App(QtGui.QMainWindow):
+class App(QtGui.QWidget):
     """
     This is the main widget class
     """
@@ -24,7 +25,6 @@ class App(QtGui.QMainWindow):
         self.setWindowTitle("Game of Life")
         self.resizeWindow(width, height)
         self.show()
-#        self.update()
 
     def resizeWindow(self, width, height):
         """
@@ -55,25 +55,31 @@ class App(QtGui.QMainWindow):
         """
         This draws rectangles to the screen.
         """
+
         num = random.random()
-        print(num)
         if num < 0.5:
             painter.drawRect(0,0,100,100)
         else:
             painter.drawRect(100,100,100,100)
 
-    def update(self):
+    def loop(self):
         """
-        This updates the GUI based on a timer.
         """
-        timer = QtCore.QTimer()
-        timer.timeout.connect(self.drawRectangles)
-        timer.start(1000)
+        while(True):
+            self.repaint()
+            print("events up to date")
+            time.sleep(2)
+
+    def tick(self):
+        print("tick")
+        self.repaint()
 
 if __name__ == "__main__":
 
     new_widget = App(500, 250)
+
     timer = QtCore.QTimer()
-    timer.timeout.connect(new_widget.drawRectangles)
+    timer.timeout.connect(new_widget.tick)
     timer.start(1000)
+        
     sys.exit(new_widget.app.exec_())
