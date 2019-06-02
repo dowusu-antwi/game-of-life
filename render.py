@@ -10,8 +10,7 @@ Author: dowusu
 """
 
 import sys
-import random
-import time
+import gen
 from PyQt4 import QtGui,QtCore
 
 class App(QtGui.QWidget):
@@ -23,10 +22,18 @@ class App(QtGui.QWidget):
         self.app = QtGui.QApplication(sys.argv)
         super(App,self).__init__()
         self.setWindowTitle("Game of Life")
-        self.resizeWindow(width, height)
+        self.resize_window(width, height)
+        self.timer = self.setup_timer()
+        self.rectangle_counter = gen.gen()
         self.show()
 
-    def resizeWindow(self, width, height):
+    def setup_timer(self):
+        timer = QtCore.QTimer()
+        timer.timeout.connect(self.update)
+        timer.start(50)
+        return timer
+        
+    def resize_window(self, width, height):
         """
         This changes the window dimensions
         """
@@ -43,6 +50,18 @@ class App(QtGui.QWidget):
         self.drawObjects(painter)
         painter.end()
 
+    def drawRectangles(self, painter):
+        """
+        This draws rectangles to the screen.
+        """
+
+        counter = next(self.rectangle_counter)
+        print(counter)
+        if counter:
+            painter.drawRect(0,0,100,100)
+        else:
+            painter.drawRect(100,100,100,100)
+
     def drawObjects(self, painter):
         """
         This will draw any objects necessary to
@@ -51,35 +70,13 @@ class App(QtGui.QWidget):
 
         self.drawRectangles(painter)
 
-    def drawRectangles(self, painter):
-        """
-        This draws rectangles to the screen.
-        """
-
-        num = random.random()
-        if num < 0.5:
-            painter.drawRect(0,0,100,100)
-        else:
-            painter.drawRect(100,100,100,100)
-
-    def loop(self):
-        """
-        """
-        while(True):
-            self.repaint()
-            print("events up to date")
-            time.sleep(2)
-
-    def tick(self):
-        print("tick")
-        self.update()
-
 if __name__ == "__main__":
 
     new_widget = App(500, 250)
 
+    """
     timer = QtCore.QTimer()
     timer.timeout.connect(new_widget.tick)
     timer.start(1000)
-        
+    """ 
     sys.exit(new_widget.app.exec_())
