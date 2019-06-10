@@ -27,8 +27,15 @@ class App(QtGui.QWidget):
         self.resize_window(width, height)
         self.timer = self.setup_timer()
 
+        # this will keep track of whether the
+        #  rendering has begun, added because
+        #  the first frame is skipped and not
+        #  rendered for some reason...see inside
+        #  draw_rectangles method below*
+        self.drawn = None
+
         board_width, board_height = (20, 20)
-        self.board = main.Board(board_width, board_height, "beacon", (2,2))
+        self.board = main.Board(board_width, board_height, "arrow", (2,2))
         self.pixel_width, self.pixel_height = (width/board_width, height/board_height)
 
         self.show()
@@ -36,7 +43,7 @@ class App(QtGui.QWidget):
     def setup_timer(self):
         timer = QtCore.QTimer()
         timer.timeout.connect(self.update)
-        timer.start(1000)
+        timer.start(100)
         return timer
         
     def resize_window(self, width, height):
@@ -65,6 +72,13 @@ class App(QtGui.QWidget):
         #  and draw rectangles to render it, then
         #  it will calculate the next board and
         #  reset it
+
+        # *if nothing has yet been drawn, will skip
+        #  this iteration (so that the first frame
+        #  is not skipped instead)
+        if not self.drawn:
+            self.drawn = True
+            return
 
         current_board = self.board.seed
 

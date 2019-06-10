@@ -66,7 +66,7 @@ patterns = {"toad":[[0,1,1,1],[1,1,1,0]], "glider": [[1,0,1],[0,1,1],[0,1,0]],
 
 class Board:
 
-    def __init__(self, width, height, pattern=None, anchor=None):
+    def __init__(self, width, height, patterns=None, anchors=None):
         self.dimensions = [height, width]
         self.width = width
         self.height = height
@@ -74,8 +74,11 @@ class Board:
         # if initial seed given, sets to seed attribute
         #  and otherwise generates random seed
         # assumes width, height parameters are correct
-        if pattern and anchor:
-            self.seed = self.add_pattern(pattern, anchor)
+        if patterns and anchors:
+            self.seed = self.get_dead_board()
+            for index, pattern in enumerate(patterns):
+                anchor = anchors[index]
+                self.add_pattern(pattern, anchor)
         else:
             self.seed = self.get_random_board()
 
@@ -112,12 +115,13 @@ class Board:
          location on the board
         """
        
-        # this iterates over the elements of pattern,
-        #  keeping track of coordinate position, and
-        #  updating empty board by adding anchor to
-        #  pattern coordinates
+        # this iterates over the elements of a pattern,
+        #  keeping track of absolute coordinate position.
+        #  calculates absolute position of each pattern
+        #  element by adding anchor to relative position
+        #  of pattern element
 
-        seed = self.get_dead_board()
+        seed = self.seed
 
         pattern = patterns[pattern_name]
         anchor_row, anchor_col = anchor
@@ -129,6 +133,7 @@ class Board:
                 if self.in_bounds((new_row, new_col)):
                     seed[new_row][new_col] = pattern_elem
 
+        self.seed = seed
         return seed
 
     def render_board(self):
@@ -286,5 +291,5 @@ if __name__ == "__main__":
     b.play_game()
     """
     
-    b = Board(15,15,"grenade",(1,1))
+    b = Board(15,15,["grenade"],[(1,1)])
     b.play_game()
