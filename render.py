@@ -35,7 +35,7 @@ class App(QtGui.QWidget):
         self.drawn = None
 
         board_width, board_height = (20, 20)
-        self.board = main.Board(board_width, board_height, "arrow", (2,2))
+        self.board = main.Board(board_width, board_height, ["arrow"], [(2,2)])
         self.pixel_width, self.pixel_height = (width/board_width, height/board_height)
 
         self.show()
