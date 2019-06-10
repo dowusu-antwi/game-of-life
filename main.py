@@ -21,8 +21,48 @@ def make_pulsar():
     bottom = top[::-1]
     return top + [l3] + bottom
 
+def make_arrow():
+    seed = [0]*5
+    seed = [seed[:] for c in range(7)]
+    for i in [0,6]:
+        seed[i][4] = 1
+    for i in [1,5]:
+        seed[i][2], seed[i][4] = (1,1)
+    for i in range(2,5):
+        seed[i][0], seed[i][1] = (1,1)
+    return seed 
+
+def make_grenade():
+    l1 = [0,0,1,1,0,0,0,0]
+    l2 = [0,1,0,0,0,1,0,0]
+    l3 = [1,0,0,0,0,0,1,0]
+    l4 = [1,0,0,0,1,0,1,1]
+
+    top = [l1,l2,l3]
+    bottom = top[::-1]
+    seed = top + [l4] + bottom
+    seed = [[0,0,1,1,0,0,0,0],
+            [0,1,0,0,0,1,0,0],
+            [1,0,0,0,0,0,1,0],
+            [1,0,0,0,1,0,1,1],
+            [1,0,0,0,0,0,1,0],
+            [0,1,0,0,0,1,0,0],
+            [0,0,1,1,0,0,0,0]]
+    return seed
+
+def make_beacon():
+    return [[1,1,0,0],
+            [1,0,0,0],
+            [0,0,0,1],
+            [0,0,1,1]]
+
+def make_gosper():
+    return None
+
 patterns = {"toad":[[0,1,1,1],[1,1,1,0]], "glider": [[1,0,1],[0,1,1],[0,1,0]],
-           "pulsar": make_pulsar()}
+           "pulsar": make_pulsar(), "block": [[1,1],[1,1]], "arrow": make_arrow(),
+           "grenade": make_grenade(), "antisym": [[0,1],[1,1]], "beacon": make_beacon(),
+           "gosper": make_gosper()}
 
 class Board:
 
@@ -246,5 +286,5 @@ if __name__ == "__main__":
     b.play_game()
     """
     
-    b = Board(15,15,"pulsar",(1,1))
+    b = Board(15,15,"grenade",(1,1))
     b.play_game()
