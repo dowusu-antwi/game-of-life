@@ -59,10 +59,15 @@ def make_beacon():
 def make_gosper():
     return None
 
-patterns = {"toad":[[0,1,1,1],[1,1,1,0]], "glider": [[1,0,1],[0,1,1],[0,1,0]],
-           "pulsar": make_pulsar(), "block": [[1,1],[1,1]], "arrow": make_arrow(),
-           "grenade": make_grenade(), "antisym": [[0,1],[1,1]], "beacon": make_beacon(),
-           "gosper": make_gosper()}
+patterns = {"toad":[[0,1,1,1],[1,1,1,0]], 
+            "glider": [[1,0,1],[0,1,1],[0,1,0]],
+            "pulsar": make_pulsar(), 
+            "block": [[1,1],[1,1]], 
+            "arrow": make_arrow(),
+            "grenade": make_grenade(), 
+            "antisym": [[0,1],[1,1]],
+            "beacon": make_beacon(),
+            "gosper": make_gosper()}
 
 class Board:
 
@@ -179,7 +184,8 @@ class Board:
         #
         # (recursive solution is more efficient and makes
         #  higher dimensions easy to integrate...!)
-        def get_cell_neighbors(coordinates, neighbors=[], original_coordinates=None):
+        def get_cell_neighbors(coordinates, neighbors=[], 
+                               original_coordinates=None):
 
             # this keeps track of original coordinates so
             #  that it can be removed from neighbors at the end,
@@ -202,8 +208,7 @@ class Board:
                     neighbors_in_bounds.remove(original_coordinates)
                 return neighbors_in_bounds
 
-            # Recursive: iterates over neighbors and
-            #  returns new list
+            # Recursive: iterates over neighbors and returns new list
             else:
                 first_coord = coordinates[0]
                 other_coords = coordinates[1:]
@@ -224,8 +229,8 @@ class Board:
                 else:
                     new_neighbors = []
                     for neighbor in neighbors:
-                        new_neighbors.extend([neighbor + new_coord
-                                              for new_coord in first_neighbors])
+                        new_neighbors.extend([neighbor + coord
+                                              for coord in first_neighbors])
                     return get_cell_neighbors(other_coords, new_neighbors,
                                               original_coordinates)
 
@@ -275,7 +280,7 @@ class Board:
     def play_game(self):
         while True:
             self.render_board()
-            time.sleep(0.3)
+            time.sleep(0.03)
             self.seed = self.get_next_state()
 
 if __name__ == "__main__":
@@ -291,5 +296,6 @@ if __name__ == "__main__":
     b.play_game()
     """
     
-    b = Board(15,15,["grenade"],[(1,1)])
+    b = Board(60,60,["grenade", "pulsar", "beacon", "arrow"],
+                    [(1,1),(5,5), (10,10), (40,15)])
     b.play_game()

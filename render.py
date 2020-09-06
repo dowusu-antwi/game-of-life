@@ -11,7 +11,7 @@ Author: dowusu
 
 import sys
 import main
-from PyQt4 import QtGui,QtCore
+from PyQt4 import QtGui, QtCore
 
 class App(QtGui.QWidget):
     """
@@ -34,16 +34,22 @@ class App(QtGui.QWidget):
         #  draw_rectangles method below*
         self.drawn = None
 
-        board_width, board_height = (20, 20)
-        self.board = main.Board(board_width, board_height, ["arrow"], [(2,2)])
-        self.pixel_width, self.pixel_height = (width/board_width, height/board_height)
+        board_width, board_height = (120, 120)
+        self.board = main.Board(board_width, board_height, 
+                                ["grenade", "pulsar", "beacon", "arrow"],
+                                [(1,1),(5,5), (10,10), (40,15)])
+        #self.board = main.Board(board_width, board_height, 
+        #                        ["arrow", "pulsar"],
+        #                        [(2,2),(4,4)])
+        self.pixel_width, self.pixel_height = (width/board_width, 
+                                               height/board_height)
 
         self.show()
 
     def setup_timer(self):
         timer = QtCore.QTimer()
         timer.timeout.connect(self.update)
-        timer.start(100)
+        timer.start(50)
         return timer
         
     def resize_window(self, width, height):
@@ -99,7 +105,6 @@ class App(QtGui.QWidget):
         This will draw any objects necessary to
          the screen.
         """
-
         self.draw_rectangles(painter)
 
 if __name__ == "__main__":
