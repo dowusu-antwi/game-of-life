@@ -29,36 +29,32 @@ class GameBoard(QtWidgets.QWidget):
         painter = QtGui.QPainter()
         painter.begin(self)
         painter.setBrush(QtGui.QColor(200,0,0))
-        for index in range(10):
+        for index in range(14):
             painter.drawRect(0 + index*100, 0, 100, 100)
         painter.end()
 
-class Dashboard(QtWidgets.QWidget):
+class Dashboard(QtWidgets.QGridLayout):
     def __init__(self):
         super().__init__()
-        self.grid = self.make_grid()
+        self.make_grid()
 
     def make_grid(self):
-        grid = QtWidgets.QGridLayout()
-        #self.setLayout(grid)
-
-        patterns = QtWidgets.QListWidget()
+        patterns = QtWidgets.QLabel('Make a list...') #patterns = QtWidgets.QListWidget()
         label = QtWidgets.QLabel('Location:')
         label.setAlignment(QtCore.Qt.AlignCenter)
-        edit = QtWidgets.QLineEdit()
+        edit = QtWidgets.QLabel('Make an edit..') #edit = QtWidgets.QLineEdit()
         selected_pattern_image = QtWidgets.QLabel('Test, Replace with QWidget')
         start_button = QtWidgets.QPushButton('Start')
         pause_button = QtWidgets.QPushButton('Pause')
         reset_button = QtWidgets.QPushButton('Reset')
 
-        grid.addWidget(patterns, *(0, 0, 2, 1))
-        grid.addWidget(label, *(0, 1, 1, 1))
-        grid.addWidget(edit, *(1, 1, 1, 1))
-        grid.addWidget(selected_pattern_image, *(2, 0, 3, 1))
-        grid.addWidget(start_button, *(2, 1, 1, 1))
-        grid.addWidget(pause_button, *(3, 1, 1, 1))
-        grid.addWidget(reset_button, *(4, 1, 1, 1))
-        return grid
+        self.addWidget(patterns, *(0, 0, 2, 1))
+        self.addWidget(label, *(0, 1, 1, 1))
+        self.addWidget(edit, *(1, 1, 1, 1))
+        self.addWidget(selected_pattern_image, *(2, 0, 3, 1))
+        self.addWidget(start_button, *(2, 1, 1, 1))
+        self.addWidget(pause_button, *(3, 1, 1, 1))
+        self.addWidget(reset_button, *(4, 1, 1, 1))
         
 
 if __name__ == "__main__":
@@ -66,19 +62,32 @@ if __name__ == "__main__":
 
     app = QtWidgets.QApplication([])
 
+    ## Nest grid inside HBox
+    #widget = QtWidgets.QWidget()
+    #v_layout = QtWidgets.QHBoxLayout()
+    #grid = QtWidgets.QGridLayout()
+    #button_0 = QtWidgets.QPushButton('0')
+    #button_1 = QtWidgets.QPushButton('1')
+    #grid.addWidget(button_0, *(0, 0))
+    #grid.addWidget(button_1, *(1, 0))
+    #v_layout.addLayout(grid)
+    #button_2 = QtWidgets.QPushButton('2')
+    #v_layout.addWidget(button_2)
+    #widget.setLayout(v_layout)
+    #widget.showMaximized()
+
     ## Using grid layouts
     widget = QtWidgets.QWidget()
-    grid = QtWidgets.QGridLayout()
-    widget.setLayout(grid)
-    label = QtWidgets.QLabel('Game of Life')
-    label.setAlignment(QtCore.Qt.AlignCenter)
-    grid.addWidget(label, 0, 0, 1, 2)
-    dashboard_widget = Dashboard()
-    print("Dashboard geom: %s" % dashboard_widget.frameGeometry())
-    grid.addWidget(dashboard_widget, 1, 1, 10, 1)
+    h_layout = QtWidgets.QHBoxLayout()
+    #label = QtWidgets.QLabel('Game of Life')
+    #label.setAlignment(QtCore.Qt.AlignCenter)
+    #grid.addWidget(label, 0, 0, 1, 2)
     #grid.addLayout(dashboard_widget.grid, 1, 1, 10, 1)
     gameboard_widget = GameBoard()
-    grid.addWidget(gameboard_widget, 1, 0, 10, 1)
+    h_layout.addWidget(gameboard_widget, 3)
+    dashboard_grid = Dashboard()
+    h_layout.addLayout(dashboard_grid, 1)
+    widget.setLayout(h_layout)
     widget.showMaximized()
 
     ## Using VBox, HBox layouts
