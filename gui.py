@@ -46,11 +46,17 @@ class GameBoard(QtWidgets.QWidget):
         super().__init__()
  
     def paintEvent(self, event):
+        width = self.frameGeometry().width()
+        height = self.frameGeometry().height()
         painter = QtGui.QPainter()
         painter.begin(self)
         painter.setBrush(QtGui.QColor(200,0,0))
-        for index in range(14):
-            painter.drawRect(0 + index*100, 0, 100, 100)
+        #x_side_length = width / 10
+        #y_side_length = height / 10
+        #x = width / 2 - x_side_length / 2
+        #y = height / 2 - y_side_length / 2
+        #painter.drawRect(x, y, x_side_length, y_side_length)
+        painter.drawRect(0, 0, width, height)
         painter.end()
 
 
