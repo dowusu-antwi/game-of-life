@@ -2,7 +2,7 @@
 
 from PyQt5 import QtWidgets, QtCore, QtGui
 import sys
-
+import random
 
 class App(QtWidgets.QWidget):
     """
@@ -16,7 +16,16 @@ class App(QtWidgets.QWidget):
         self.application_manager = QtWidgets.QApplication([])
         super().__init__()
         self.build()
+        self.setup_timer()
         self.showMaximized()
+
+    def setup_timer(self):
+        """
+        Sets up timer for updating main app, with milliseconds for timer count.
+        """
+        timer = QtCore.QTimer(self)
+        timer.timeout.connect(self.update)
+        timer.start(500)
 
     def build(self):
         """
@@ -25,11 +34,12 @@ class App(QtWidgets.QWidget):
         toplevel_layout = QtWidgets.QHBoxLayout()
         self.setLayout(toplevel_layout)
 
+        # Adds gameboard and dashboard widgets to top level layout.
         gameboard = GameBoard()
-        dashboard_grid = Dashboard(toplevel_layout)
-
         GAMEBOARD_STRETCH = 3
         toplevel_layout.addWidget(gameboard, GAMEBOARD_STRETCH)
+        
+        dashboard_grid = Dashboard(toplevel_layout)
 
     def run(self):
         """
@@ -46,16 +56,39 @@ class GameBoard(QtWidgets.QWidget):
         super().__init__()
  
     def paintEvent(self, event):
+        painter = QtGui.QPainter()
+        painter.begin(self)
+        self.display_state(painter)
+        painter.end()
+
+    def display_state(self, painter):
+        """
+        """
+        width = self.frameGeometry().width()
+        height = self.frameGeometry().height()
+        red = random.random() * 200
+        green = random.random() * 200
+        blue = random.random() * 200
+        painter.setBrush(QtGui.QColor(red, green, blue))
+        painter.drawRect(0, 0, width, height)
+
+
+class CustomWidget(QtWidgets.QWidget):
+    """
+    Custom widget (currently, for selected pattern's image).
+    """
+    def __init__(self):
+        super().__init__()
+
+    def paintEvent(self, event):
         width = self.frameGeometry().width()
         height = self.frameGeometry().height()
         painter = QtGui.QPainter()
         painter.begin(self)
-        painter.setBrush(QtGui.QColor(200,0,0))
-        #x_side_length = width / 10
-        #y_side_length = height / 10
-        #x = width / 2 - x_side_length / 2
-        #y = height / 2 - y_side_length / 2
-        #painter.drawRect(x, y, x_side_length, y_side_length)
+        red = random.random() * 200
+        green = random.random() * 200
+        blue = random.random() * 200
+        painter.setBrush(QtGui.QColor(red, green, blue))
         painter.drawRect(0, 0, width, height)
         painter.end()
 
@@ -82,7 +115,8 @@ class Dashboard(QtWidgets.QGridLayout):
         label.setAlignment(QtCore.Qt.AlignCenter)
         editX = QtWidgets.QLineEdit()
         editY = QtWidgets.QLineEdit()
-        selected_pattern_image = QtWidgets.QWidget()
+        #selected_pattern_image = QtWidgets.QWidget()
+        selected_pattern_image = CustomWidget()
         start_button = QtWidgets.QPushButton('Start')
         pause_button = QtWidgets.QPushButton('Pause')
         reset_button = QtWidgets.QPushButton('Reset')
