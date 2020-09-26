@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 from game import *
+from gui import *
 import time
 
 '''
@@ -15,13 +16,14 @@ Modules:
     3. Main: Build GUI and Create Game
 '''
 
-WIDTH = 5
-HEIGHT = 5
-SEED = [[DEAD_VAL]*5,
-        [DEAD_VAL, LIVING_VAL, LIVING_VAL, LIVING_VAL, DEAD_VAL],
-        [DEAD_VAL, DEAD_VAL, LIVING_VAL, LIVING_VAL, LIVING_VAL],
-        [DEAD_VAL]*5,
-        [DEAD_VAL]*5]
+WIDTH = 6
+HEIGHT = 6
+SEED = [[DEAD_VAL]*6,
+        [DEAD_VAL, LIVING_VAL, LIVING_VAL, LIVING_VAL, DEAD_VAL, DEAD_VAL],
+        [DEAD_VAL, DEAD_VAL, LIVING_VAL, LIVING_VAL, LIVING_VAL, DEAD_VAL],
+        [DEAD_VAL]*6,
+        [DEAD_VAL]*6,
+        [DEAD_VAL]*6]
 
 def play():
     '''
@@ -30,7 +32,7 @@ def play():
     grid = Grid(WIDTH, HEIGHT, SEED)
     while True:
         time.sleep(0.5)
-        grid.update_grid()
+        grid.update_state()
         grid.render()
 
 def launch():
@@ -41,4 +43,6 @@ def launch():
     game_page = GamePage()
 
 if __name__ == "__main__":
-    pass
+    game = Grid(WIDTH, HEIGHT, SEED)
+    gui = App(game)
+    gui.run()

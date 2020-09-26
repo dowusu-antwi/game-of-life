@@ -41,7 +41,7 @@ class Grid:
         return self.grid
 
 
-    def update_grid(self):
+    def update_state(self):
         '''
         Updates grid cells (i.e., carries out next time step).
 
@@ -60,7 +60,7 @@ class Grid:
                 cell = [x,y]
                 living_neighbors_count = self.count_living_neighbors(cell)
                 state = grid[x][y]
-                new_state = self.update_state(state, living_neighbors_count)
+                new_state = self.update_cell(state, living_neighbors_count)
                 new_row.append(new_state)
             new_grid.append(new_row)
         self.grid = new_grid
@@ -166,7 +166,7 @@ class Grid:
         return self.get_state(rest, grid[first])
 
 
-    def update_state(self, state, living_neighbors_count):
+    def update_cell(self, state, living_neighbors_count):
         '''
         Gets new cell state given neighboring states.
 
@@ -174,7 +174,7 @@ class Grid:
          state (LIVING_VAL or DEAD_VAL): state of a given cell,
          living_neighbors_count (int): number of living neighbors.
 
-        Returns updated state, LIVING_VAL or DEAD_VAL.
+        Returns updated cell state, LIVING_VAL or DEAD_VAL.
         '''
 
         # Applies Conway's Game of Life rules:
