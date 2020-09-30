@@ -17,6 +17,7 @@ class App(QtWidgets.QWidget):
         """
         self.application_manager = QtWidgets.QApplication([])
         super().__init__()
+        self.game = game
         self.build(game)
         self.setup_timer()
         self.showMaximized()
@@ -88,11 +89,11 @@ class GameBoard(QtWidgets.QWidget):
                 cell_state = self.game.get_state([row, column])
                 if cell_state == LIVING_VAL:
                     painter.setBrush(QtGui.QColor(RED, 0, 0))
+                    x = column * pixel_width
+                    y = row * pixel_height
+                    painter.drawRect(x, y, pixel_width, pixel_height)
                 elif cell_state == DEAD_VAL:
-                    painter.setBrush(QtGui.QColor(200, 200, 200))
-                x = column * pixel_width
-                y = row * pixel_height
-                painter.drawRect(x, y, pixel_width, pixel_height)
+                    pass
 
 
 class CustomWidget(QtWidgets.QWidget):
@@ -130,7 +131,7 @@ class Dashboard(QtWidgets.QGridLayout):
         Organizes dashboard controls (i.e., buttons, list selectors).
         """
         patterns = QtWidgets.QListWidget()
-        label = QtWidgets.QLabel('Location:')
+        label = QtWidgets.QLabel('Pattern Anchor:')
         label.setAlignment(QtCore.Qt.AlignCenter)
         editX = QtWidgets.QLineEdit()
         editY = QtWidgets.QLineEdit()
@@ -139,15 +140,21 @@ class Dashboard(QtWidgets.QGridLayout):
         start_button = QtWidgets.QPushButton('Start')
         pause_button = QtWidgets.QPushButton('Pause')
         reset_button = QtWidgets.QPushButton('Reset')
+        reflect_button = QtWidgets.QPushButton('Reflect')
+        rotate_button = QtWidgets.QPushButton('Rotate')
+        add_pattern_button = QtWidgets.QPushButton('Add Pattern')
 
         self.addWidget(patterns, *(0, 0, 2, 1))
         self.addWidget(selected_pattern_image, *(0, 1, 1, 3))
         self.addWidget(label, *(1, 1, 1, 1))
         self.addWidget(editX, *(1, 2, 1, 1))
         self.addWidget(editY, *(1, 3, 1, 1))
-        self.addWidget(start_button, *(2, 0, 2, 1))
-        self.addWidget(pause_button, *(2, 1, 1, 3))
-        self.addWidget(reset_button, *(3, 1, 1, 3))
+        self.addWidget(start_button, *(2, 0, 1, 1))
+        self.addWidget(pause_button, *(3, 0, 1, 1))
+        self.addWidget(reset_button, *(4, 0, 1, 1))
+        self.addWidget(reflect_button, *(2, 1, 1, 3))
+        self.addWidget(rotate_button, *(3, 1, 1, 3))
+        self.addWidget(add_pattern_button, *(4, 1, 1, 3))
         
 
 if __name__ == "__main__":
