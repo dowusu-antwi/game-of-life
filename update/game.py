@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 
+from patterns import *
+
 '''
 Game of Life: Game Creation
 
@@ -26,7 +28,7 @@ class Grid:
         '''
         grid = [[DEAD_VAL]*width for i in range(height)] if not seed else seed
         self.grid = grid
-        self.seed = grid
+        self.seed = [row[:] for row in grid]
         self.dimensions = [width, height]
 
 
@@ -40,6 +42,43 @@ class Grid:
         '''
         return self.grid
 
+
+    def reset(self):
+        '''
+        Resets current grid to seed.
+
+        No inputs.
+
+        No returns.
+        '''
+        self.grid = self.seed
+
+
+    def add_pattern(self, pattern_name, anchor):
+        '''
+        Adds block pattern to seed at given anchor.
+
+        Inputs:
+            pattern_name (str): name of pattern to lookup in dictionary,
+            anchor (tuple): coordinates at which to anchor the given pattern.
+
+        No returns.
+        '''
+
+        if pattern_name not in PATTERNS:
+            print("Pattern name (%s) invalid." % pattern_name)
+            return
+
+        pattern = PATTERNS[pattern_name]
+        anchor_row, anchor_column = anchor
+        for row_number, row in enumerate(pattern):
+            new_row = row_number + anchor_row
+            for column_number, state in enumerate(row):
+                new_column = column_number + anchor_column
+                if (state == LIVING and
+                    self.in_bounds((new_row, new_column))):
+                    self.grid[new_row][new_column] = LIVING
+        
 
     def update_state(self):
         '''
@@ -138,6 +177,8 @@ class Grid:
         if type(cell) == int:
             dimension_max = self.dimensions[dimension]
             return (cell >= 0 and cell < dimension_max)
+        if not cell: # empty cell
+            return True
         return (self.in_bounds(cell[0], dimension) and 
                 self.in_bounds(cell[1:], dimension + 1))
 
@@ -185,17 +226,6 @@ class Grid:
             return LIVING_VAL if ((living_neighbors_count == 2) or 
                                   (living_neighbors_count == 3)) else DEAD_VAL
         return LIVING_VAL if living_neighbors_count == 3 else state
-
-
-    def reset(self):
-        '''
-        Resets current grid to seed.
-
-        No inputs.
-
-        No returns.
-        '''
-        self.grid = self.seed
 
 
     def render(self):

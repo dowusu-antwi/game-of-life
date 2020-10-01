@@ -28,7 +28,7 @@ class App(QtWidgets.QWidget):
         """
         timer = QtCore.QTimer(self)
         timer.timeout.connect(self.update)
-        timer.start(100)
+        timer.start(80)
 
     def build(self, game):
         """
