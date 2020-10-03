@@ -19,16 +19,7 @@ class App(QtWidgets.QWidget):
         super().__init__()
         self.game = game
         self.build(game)
-        self.setup_timer()
         self.showMaximized()
-
-    def setup_timer(self):
-        """
-        Sets up timer for updating main app, with milliseconds for timer count.
-        """
-        timer = QtCore.QTimer(self)
-        timer.timeout.connect(self.update)
-        timer.start(80)
 
     def build(self, game):
         """
@@ -45,7 +36,7 @@ class App(QtWidgets.QWidget):
         GAMEBOARD_STRETCH = 3
         toplevel_layout.addWidget(gameboard, GAMEBOARD_STRETCH)
         
-        dashboard_grid = Dashboard(toplevel_layout)
+        dashboard_grid = Dashboard(toplevel_layout, gameboard)
 
     def run(self):
         """
@@ -61,6 +52,15 @@ class GameBoard(QtWidgets.QWidget):
     def __init__(self, game):
         super().__init__()
         self.game = game
+        self.setup_timer()
+
+    def setup_timer(self):
+        """
+        Sets up timer for updating main app, with milliseconds for timer count.
+        """
+        timer = QtCore.QTimer(self)
+        timer.timeout.connect(self.update)
+        timer.start(80)
  
     def paintEvent(self, event):
         painter = QtGui.QPainter()
@@ -96,7 +96,7 @@ class GameBoard(QtWidgets.QWidget):
                     pass
 
 
-class CustomWidget(QtWidgets.QWidget):
+class PatternImage(QtWidgets.QWidget):
     """
     Custom widget (currently, for selected pattern's image).
     """
@@ -114,35 +114,38 @@ class CustomWidget(QtWidgets.QWidget):
 
 
 class Dashboard(QtWidgets.QGridLayout):
-    """
+    '''
     Contains buttons and list selectors to modify contents of game board.
-    """
-    def __init__(self, parent_layout):
-        """
+    '''
+    def __init__(self, parent_layout, gameboard):
+        '''
         Initializes dashboard widget layout and makes dashboard control grid.
-        """
+        '''
         super().__init__()
         DASHBOARD_STRETCH = 1
         parent_layout.addLayout(self, DASHBOARD_STRETCH)
+        self.gameboard = gameboard
         self.make_grid()
 
     def make_grid(self):
-        """
+        '''
         Organizes dashboard controls (i.e., buttons, list selectors).
-        """
+        '''
         patterns = QtWidgets.QListWidget()
         label = QtWidgets.QLabel('Pattern Anchor:')
         label.setAlignment(QtCore.Qt.AlignCenter)
         editX = QtWidgets.QLineEdit()
         editY = QtWidgets.QLineEdit()
         #selected_pattern_image = QtWidgets.QWidget()
-        selected_pattern_image = CustomWidget()
+        selected_pattern_image = PatternImage()
         start_button = QtWidgets.QPushButton('Start')
-        pause_button = QtWidgets.QPushButton('Pause')
+        toggle_button = QtWidgets.QPushButton('Pause')
         reset_button = QtWidgets.QPushButton('Reset')
         reflect_button = QtWidgets.QPushButton('Reflect')
         rotate_button = QtWidgets.QPushButton('Rotate')
         add_pattern_button = QtWidgets.QPushButton('Add Pattern')
+
+        toggle_button.clicked.connect(lambda _ : self.toggle_sim(toggle_button))
 
         self.addWidget(patterns, *(0, 0, 2, 1))
         self.addWidget(selected_pattern_image, *(0, 1, 1, 3))
@@ -150,12 +153,28 @@ class Dashboard(QtWidgets.QGridLayout):
         self.addWidget(editX, *(1, 2, 1, 1))
         self.addWidget(editY, *(1, 3, 1, 1))
         self.addWidget(start_button, *(2, 0, 1, 1))
-        self.addWidget(pause_button, *(3, 0, 1, 1))
+        self.addWidget(toggle_button, *(3, 0, 1, 1))
         self.addWidget(reset_button, *(4, 0, 1, 1))
         self.addWidget(reflect_button, *(2, 1, 1, 3))
         self.addWidget(rotate_button, *(3, 1, 1, 3))
         self.addWidget(add_pattern_button, *(4, 1, 1, 3))
         
+    def toggle_sim(self, toggle_button):
+        '''
+        Toggles pause / resume on gameboard grid.
+
+        Inputs:
+            gameboard (QtWidgets.QWidget): gameboard widget for simulation.
+
+        No returns.
+        '''
+        gameboard = self.gameboard
+        updates_enabled = gameboard.updatesEnabled()
+        gameboard.setUpdatesEnabled(not updates_enabled)
+        if gameboard.updatesEnabled():
+            toggle_button.setText('Pause')
+        else:
+            toggle_button.setText('Resume')
 
 if __name__ == "__main__":
     pass
