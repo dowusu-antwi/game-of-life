@@ -52,15 +52,6 @@ class GameBoard(QtWidgets.QWidget):
     def __init__(self, game):
         super().__init__()
         self.game = game
-        self.setup_timer()
-
-    def setup_timer(self):
-        """
-        Sets up timer for updating main app, with milliseconds for timer count.
-        """
-        timer = QtCore.QTimer(self)
-        timer.timeout.connect(self.update)
-        timer.start(80)
  
     def paintEvent(self, event):
         painter = QtGui.QPainter()
@@ -125,7 +116,20 @@ class Dashboard(QtWidgets.QGridLayout):
         DASHBOARD_STRETCH = 1
         parent_layout.addLayout(self, DASHBOARD_STRETCH)
         self.gameboard = gameboard
+        self.timer = self.setup_timer()
         self.make_grid()
+
+    def setup_timer(self):
+        '''
+        Sets up timer for updating gameboard, with milliseconds for timer count.
+
+        Returns QTimer object.
+        '''
+        gameboard = self.gameboard
+
+        timer = QtCore.QTimer(gameboard)
+        timer.timeout.connect(gameboard.update)
+        return timer
 
     def make_grid(self):
         '''
@@ -145,7 +149,14 @@ class Dashboard(QtWidgets.QGridLayout):
         rotate_button = QtWidgets.QPushButton('Rotate')
         add_pattern_button = QtWidgets.QPushButton('Add Pattern')
 
-        toggle_button.clicked.connect(lambda _ : self.toggle_sim(toggle_button))
+        toggle_button.setEnabled(False)
+        reset_button.setEnabled(False)
+
+        start_button.clicked.connect(lambda _ : self.start_sim(start_button,
+                                                               toggle_button))
+        toggle_button.clicked.connect(lambda _ : self.toggle_sim(toggle_button,
+                                                                 reset_button))
+        reset_button.clicked.connect(self.reset_sim)
 
         self.addWidget(patterns, *(0, 0, 2, 1))
         self.addWidget(selected_pattern_image, *(0, 1, 1, 3))
@@ -158,8 +169,22 @@ class Dashboard(QtWidgets.QGridLayout):
         self.addWidget(reflect_button, *(2, 1, 1, 3))
         self.addWidget(rotate_button, *(3, 1, 1, 3))
         self.addWidget(add_pattern_button, *(4, 1, 1, 3))
+
+
+    def start_sim(self, start_button, toggle_button):
+        '''
+        Begins timer for gameboard, with milliseconds.
+
+        No inputs.
+
+        No returns.
+        '''
+        self.timer.start(80)
+        start_button.setEnabled(False)
+        toggle_button.setEnabled(True)
+
         
-    def toggle_sim(self, toggle_button):
+    def toggle_sim(self, toggle_button, reset_button):
         '''
         Toggles pause / resume on gameboard grid.
 
@@ -168,13 +193,22 @@ class Dashboard(QtWidgets.QGridLayout):
 
         No returns.
         '''
-        gameboard = self.gameboard
-        updates_enabled = gameboard.updatesEnabled()
-        gameboard.setUpdatesEnabled(not updates_enabled)
-        if gameboard.updatesEnabled():
-            toggle_button.setText('Pause')
-        else:
+        timer = self.timer
+        if timer.isActive():
+            reset_button.setEnabled(True)
+            timer.stop()
             toggle_button.setText('Resume')
+        else:
+            reset_button.setEnabled(False)
+            timer.start()
+            toggle_button.setText('Pause')
+
+
+    def reset_sim(self):
+        '''
+        '''
+        self.gameboard.game.reset()
+        #paint original seed
 
 if __name__ == "__main__":
     pass
