@@ -78,6 +78,7 @@ class Grid:
                 if (state == LIVING and
                     self.in_bounds((new_row, new_column))):
                     self.grid[new_row][new_column] = LIVING
+                    self.seed[new_row][new_column] = LIVING
         
 
     def update_state(self):

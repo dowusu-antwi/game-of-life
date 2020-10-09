@@ -152,11 +152,13 @@ class Dashboard(QtWidgets.QGridLayout):
         toggle_button.setEnabled(False)
         reset_button.setEnabled(False)
 
-        start_button.clicked.connect(lambda _ : self.start_sim(start_button,
+        start_button.clicked.connect(lambda : self.start_sim(start_button,
                                                                toggle_button))
-        toggle_button.clicked.connect(lambda _ : self.toggle_sim(toggle_button,
+        toggle_button.clicked.connect(lambda : self.toggle_sim(toggle_button,
                                                                  reset_button))
-        reset_button.clicked.connect(self.reset_sim)
+        reset_button.clicked.connect(lambda : self.reset_sim(start_button,
+                                                               reset_button,
+                                                               toggle_button))
 
         self.addWidget(patterns, *(0, 0, 2, 1))
         self.addWidget(selected_pattern_image, *(0, 1, 1, 3))
@@ -204,11 +206,23 @@ class Dashboard(QtWidgets.QGridLayout):
             toggle_button.setText('Pause')
 
 
-    def reset_sim(self):
+    def reset_sim(self, start_button, reset_button, toggle_button):
         '''
+        Resets gameboard to initial seed.
+
+        Inputs:
+            start_button (QPushButton):
+            reset_button (QPushButton):
+            toggle_button (QPushButton):
+
+        No returns.
         '''
         self.gameboard.game.reset()
-        #paint original seed
+        self.gameboard.update()
+        reset_button.setEnabled(False)
+        start_button.setEnabled(True)
+        toggle_button.setText('Pause')
+        toggle_button.setEnabled(False)
 
 if __name__ == "__main__":
     pass

@@ -25,7 +25,7 @@ def add_patterns(game):
         game.add_pattern("glider", anchor)
     game.add_pattern("toad", (30, 10))
     game.add_pattern("toad", (10, 30))
-    game.add_pattern("beacon", (25, 12))
+    game.add_pattern("beacon", (50, 12))
     game.add_pattern("arrow", (60, 10))
     game.add_pattern("beacon", (12, 25))
     game.add_pattern("arrow", (60, 50))
