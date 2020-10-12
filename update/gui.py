@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 from PyQt5 import QtWidgets, QtCore, QtGui
-import sys
+from patterns import PATTERNS
 
 LIVING_VAL = 1
 DEAD_VAL = 0
@@ -135,7 +135,9 @@ class Dashboard(QtWidgets.QGridLayout):
         '''
         Organizes dashboard controls (i.e., buttons, list selectors).
         '''
-        patterns = QtWidgets.QListWidget()
+
+        # Create dashboard items
+        patterns_list = QtWidgets.QListWidget()
         label = QtWidgets.QLabel('Pattern Anchor:')
         label.setAlignment(QtCore.Qt.AlignCenter)
         editX = QtWidgets.QLineEdit()
@@ -149,9 +151,16 @@ class Dashboard(QtWidgets.QGridLayout):
         rotate_button = QtWidgets.QPushButton('Rotate')
         add_pattern_button = QtWidgets.QPushButton('Add Pattern')
 
+        # ...
+        patterns_list.setSelectionMode(QtWidgets.QAbstractItemView. \
+                                       SingleSelection)
+        patterns_list.addItems(PATTERNS.keys())
+
+        # Initial button states...
         toggle_button.setEnabled(False)
         reset_button.setEnabled(False)
 
+        # Button functions...
         start_button.clicked.connect(lambda : self.start_sim(start_button,
                                                                toggle_button))
         toggle_button.clicked.connect(lambda : self.toggle_sim(toggle_button,
@@ -160,7 +169,8 @@ class Dashboard(QtWidgets.QGridLayout):
                                                                reset_button,
                                                                toggle_button))
 
-        self.addWidget(patterns, *(0, 0, 2, 1))
+        # Position dashboard items
+        self.addWidget(patterns_list, *(0, 0, 2, 1))
         self.addWidget(selected_pattern_image, *(0, 1, 1, 3))
         self.addWidget(label, *(1, 1, 1, 1))
         self.addWidget(editX, *(1, 2, 1, 1))
