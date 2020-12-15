@@ -11,15 +11,15 @@ Author: dowusu
 
 import sys
 import main
-from PyQt4 import QtGui, QtCore
+from PyQt5 import QtGui, QtCore, QtWidgets
 
-class App(QtGui.QWidget):
+class App(QtWidgets.QWidget):
     """
     This is the main widget class
     """
 
     def __init__(self, window_dim):
-        self.app = QtGui.QApplication(sys.argv)
+        self.app = QtWidgets.QApplication(sys.argv)
         super(App,self).__init__()
 
         self.setWindowTitle("Game of Life")
@@ -34,7 +34,7 @@ class App(QtGui.QWidget):
         #  draw_rectangles method below*
         self.drawn = None
 
-        board_width, board_height = (120, 120)
+        board_width, board_height = (50, 50)
         self.board = main.Board(board_width, board_height, 
                                 ["grenade", "pulsar", "beacon", "arrow"],
                                 [(1,1),(5,5), (10,10), (40,15)])
@@ -49,7 +49,7 @@ class App(QtGui.QWidget):
     def setup_timer(self):
         timer = QtCore.QTimer()
         timer.timeout.connect(self.update)
-        timer.start(50)
+        timer.start(60)
         return timer
         
     def resize_window(self, width, height):
@@ -94,9 +94,9 @@ class App(QtGui.QWidget):
                 x = col*self.pixel_width
                 if __:
                     painter.setBrush(QtGui.QColor(200,0,0))
+                    painter.drawRect(x, y, self.pixel_width, self.pixel_height)
                 else:
                     painter.setBrush(QtGui.QColor(0,0,200))
-                painter.drawRect(x, y, self.pixel_width, self.pixel_height)
 
         self.board.seed = self.board.get_next_state()
 
