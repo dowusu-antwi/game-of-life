@@ -151,10 +151,21 @@ class Dashboard(QtWidgets.QGridLayout):
         rotate_button = QtWidgets.QPushButton('Rotate')
         add_pattern_button = QtWidgets.QPushButton('Add Pattern')
 
-        # ...
+        # Changes dashboard item properties
+        patterns_list.setSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
         patterns_list.setSelectionMode(QtWidgets.QAbstractItemView. \
                                        SingleSelection)
         patterns_list.addItems(PATTERNS.keys())
+
+        selected_pattern_image.setSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
+
+        start_button.setSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
+        toggle_button.setSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
+        reset_button.setSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
+        reflect_button.setSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
+        rotate_button.setSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
+        add_pattern_button.setSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
+        
 
         # Initial button states...
         toggle_button.setEnabled(False)
@@ -182,6 +193,14 @@ class Dashboard(QtWidgets.QGridLayout):
         self.addWidget(rotate_button, *(3, 1, 1, 3))
         self.addWidget(add_pattern_button, *(4, 1, 1, 3))
 
+        self.setRowStretch(0, 1)
+        self.setRowStretch(1, 1)
+        self.setRowStretch(2, 2)
+        self.setRowStretch(3, 2)
+        self.setRowStretch(4, 3)
+        self.setColumnStretch(1, 1)
+        self.setColumnStretch(2, 1)
+        self.setColumnStretch(3, 1)
 
     def start_sim(self, start_button, toggle_button):
         '''
