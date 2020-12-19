@@ -152,12 +152,12 @@ class Dashboard(QtWidgets.QGridLayout):
         add_pattern_button = QtWidgets.QPushButton('Add Pattern')
 
         # Changes dashboard item properties
-        patterns_list.setSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
+        #patterns_list.setSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
         patterns_list.setSelectionMode(QtWidgets.QAbstractItemView. \
                                        SingleSelection)
         patterns_list.addItems(PATTERNS.keys())
 
-        selected_pattern_image.setSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
+        #selected_pattern_image.setSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
 
         start_button.setSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
         toggle_button.setSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
