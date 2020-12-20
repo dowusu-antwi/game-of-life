@@ -89,6 +89,8 @@ class Grid:
 
         No returns.
         '''
+
+        ## TRY TO ONLY KEEP TRACK OF WHICH CELLS ARE ALIVE, IN A SET?
         
         # Iterates over grid cells, getting neighbors of each cell and
         #  updating according to the neighboring states.
