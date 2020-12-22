@@ -152,19 +152,27 @@ class Dashboard(QtWidgets.QGridLayout):
         add_pattern_button = QtWidgets.QPushButton('Add Pattern')
 
         # Changes dashboard item properties
-        #patterns_list.setSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
+        #patterns_list.setSizePolicy(QtWidgets.QSizePolicy.Expanding, 
+        #                            QtWidgets.QSizePolicy.Expanding)
         patterns_list.setSelectionMode(QtWidgets.QAbstractItemView. \
                                        SingleSelection)
         patterns_list.addItems(PATTERNS.keys())
 
-        #selected_pattern_image.setSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
+        #selected_pattern_image.setSizePolicy(QtWidgets.QSizePolicy.Expanding, 
+        #                                     QtWidgets.QSizePolicy.Expanding)
 
-        start_button.setSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
-        toggle_button.setSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
-        reset_button.setSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
-        reflect_button.setSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
-        rotate_button.setSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
-        add_pattern_button.setSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
+        start_button.setSizePolicy(QtWidgets.QSizePolicy.Expanding, 
+                                   QtWidgets.QSizePolicy.Expanding)
+        toggle_button.setSizePolicy(QtWidgets.QSizePolicy.Expanding, 
+                                    QtWidgets.QSizePolicy.Expanding)
+        reset_button.setSizePolicy(QtWidgets.QSizePolicy.Expanding,
+                                   QtWidgets.QSizePolicy.Expanding)
+        reflect_button.setSizePolicy(QtWidgets.QSizePolicy.Expanding, 
+                                     QtWidgets.QSizePolicy.Expanding)
+        rotate_button.setSizePolicy(QtWidgets.QSizePolicy.Expanding, 
+                                    QtWidgets.QSizePolicy.Expanding)
+        add_pattern_button.setSizePolicy(QtWidgets.QSizePolicy.Expanding, 
+                                         QtWidgets.QSizePolicy.Expanding)
         
 
         # Initial button states...
@@ -173,31 +181,33 @@ class Dashboard(QtWidgets.QGridLayout):
 
         # Button functions...
         start_button.clicked.connect(lambda : self.start_sim(start_button,
-                                                               toggle_button))
+                                                             toggle_button))
         toggle_button.clicked.connect(lambda : self.toggle_sim(toggle_button,
-                                                                 reset_button))
+                                                               reset_button))
         reset_button.clicked.connect(lambda : self.reset_sim(start_button,
-                                                               reset_button,
-                                                               toggle_button))
+                                                             reset_button,
+                                                             toggle_button))
 
         # Position dashboard items
-        self.addWidget(patterns_list, *(0, 0, 2, 1))
-        self.addWidget(selected_pattern_image, *(0, 1, 1, 3))
-        self.addWidget(label, *(1, 1, 1, 1))
-        self.addWidget(editX, *(1, 2, 1, 1))
-        self.addWidget(editY, *(1, 3, 1, 1))
-        self.addWidget(start_button, *(2, 0, 1, 1))
-        self.addWidget(toggle_button, *(3, 0, 1, 1))
-        self.addWidget(reset_button, *(4, 0, 1, 1))
-        self.addWidget(reflect_button, *(2, 1, 1, 3))
-        self.addWidget(rotate_button, *(3, 1, 1, 3))
-        self.addWidget(add_pattern_button, *(4, 1, 1, 3))
+        self.addWidget(start_button, *(0, 0, 1, 4))
+        self.addWidget(toggle_button, *(1, 0, 1, 1))
+        self.addWidget(reset_button, *(1, 1, 1, 3))
+        self.addWidget(patterns_list, *(2, 0, 4, 1))
+        self.addWidget(selected_pattern_image, *(2, 1, 1, 3))
+        self.addWidget(label, *(3, 1, 1, 1))
+        self.addWidget(editX, *(3, 2, 1, 1))
+        self.addWidget(editY, *(3, 3, 1, 1))
+        self.addWidget(reflect_button, *(4, 1, 1, 3))
+        self.addWidget(rotate_button, *(5, 1, 1, 3))
+        self.addWidget(add_pattern_button, *(6, 0, 1, 4))
 
         self.setRowStretch(0, 1)
         self.setRowStretch(1, 1)
-        self.setRowStretch(2, 2)
-        self.setRowStretch(3, 2)
+        self.setRowStretch(2, 3)
+        self.setRowStretch(3, 1)
         self.setRowStretch(4, 3)
+        self.setRowStretch(5, 3)
+        self.setRowStretch(6, 1)
         self.setColumnStretch(1, 1)
         self.setColumnStretch(2, 1)
         self.setColumnStretch(3, 1)

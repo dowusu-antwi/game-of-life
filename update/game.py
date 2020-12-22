@@ -91,6 +91,7 @@ class Grid:
         '''
 
         ## TRY TO ONLY KEEP TRACK OF WHICH CELLS ARE ALIVE, IN A SET?
+        ## AND THEIR NEIGHBORS...MAYBE A BIT MORE COMPLICATED.
         
         # Iterates over grid cells, getting neighbors of each cell and
         #  updating according to the neighboring states.
