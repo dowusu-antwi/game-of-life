@@ -97,7 +97,7 @@ class PatternImage(QtWidgets.QWidget):
         Saves pattern and initializes widget for painting pattern to screen.
         """
         super().__init__()
-        #self.pattern = pattern
+        self.pattern = None
 
     def draw_pattern(self, selected_items):
         """
@@ -106,8 +106,13 @@ class PatternImage(QtWidgets.QWidget):
         if not selected_items:
             print("No items selected.")
         else:
-            pattern = selected_items[0].text()
-            print("Pattern selected: %s" % pattern)
+            pattern_name = selected_items[0].text()
+            print("Pattern selected: %s" % pattern_name)
+            print("Pattern grid:")
+            print("=========================================")
+            print(PATTERNS[pattern_name])
+            self.pattern = PATTERNS[pattern_name]
+            print("=========================================")
             self.update()
 
     def paintEvent(self, event):
@@ -115,9 +120,25 @@ class PatternImage(QtWidgets.QWidget):
         height = self.frameGeometry().height()
         painter = QtGui.QPainter()
         painter.begin(self)
-        R, G, B = randint(0, 255), randint(0, 255), randint(0, 255)
-        painter.setBrush(QtGui.QColor(R, G, B))
-        painter.drawRect(0, 0, width, height)
+        if self.pattern == None:
+            # Paints random color to widget.
+            R, G, B = randint(0, 255), randint(0, 255), randint(0, 255)
+            painter.setBrush(QtGui.QColor(R, G, B))
+            painter.drawRect(0, 0, width, height)
+        else:
+            # Scales pattern to widget and paints to it.
+            pattern = self.pattern
+            pattern_height = len(pattern)
+            pattern_width = len(pattern[0])
+            pixel_width = width / pattern_width
+            pixel_height = height / pattern_height
+            painter.setBrush(QtGui.QColor(100, 0, 0))
+            for row, pixels in enumerate(pattern):
+                for column, pixel in enumerate(pixels):
+                    if pixel == LIVING_VAL:
+                        x = column * pixel_width
+                        y = row * pixel_height 
+                        painter.drawRect(x, y, pixel_width, pixel_height)
         painter.end()
 
 
