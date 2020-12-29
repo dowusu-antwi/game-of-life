@@ -2,6 +2,7 @@
 
 from PyQt5 import QtWidgets, QtCore, QtGui
 from patterns import PATTERNS
+from random import randint
 
 LIVING_VAL = 1
 DEAD_VAL = 0
@@ -92,14 +93,30 @@ class PatternImage(QtWidgets.QWidget):
     Custom widget (currently, for selected pattern's image).
     """
     def __init__(self):
+        """
+        Saves pattern and initializes widget for painting pattern to screen.
+        """
         super().__init__()
+        #self.pattern = pattern
+
+    def draw_pattern(self, selected_items):
+        """
+        Draws pattern to widget, updating screen.
+        """
+        if not selected_items:
+            print("No items selected.")
+        else:
+            pattern = selected_items[0].text()
+            print("Pattern selected: %s" % pattern)
+            self.update()
 
     def paintEvent(self, event):
         width = self.frameGeometry().width()
         height = self.frameGeometry().height()
         painter = QtGui.QPainter()
         painter.begin(self)
-        painter.setBrush(QtGui.QColor(100, 10, 90))
+        R, G, B = randint(0, 255), randint(0, 255), randint(0, 255)
+        painter.setBrush(QtGui.QColor(R, G, B))
         painter.drawRect(0, 0, width, height)
         painter.end()
 
@@ -149,6 +166,7 @@ class Dashboard(QtWidgets.QGridLayout):
         reset_button = QtWidgets.QPushButton('Reset')
         reflect_button = QtWidgets.QPushButton('Reflect')
         rotate_button = QtWidgets.QPushButton('Rotate')
+        invert_button = QtWidgets.QPushButton('Invert')
         add_pattern_button = QtWidgets.QPushButton('Add Pattern')
 
         # Changes dashboard item properties
@@ -171,6 +189,8 @@ class Dashboard(QtWidgets.QGridLayout):
                                      QtWidgets.QSizePolicy.Expanding)
         rotate_button.setSizePolicy(QtWidgets.QSizePolicy.Expanding, 
                                     QtWidgets.QSizePolicy.Expanding)
+        invert_button.setSizePolicy(QtWidgets.QSizePolicy.Expanding, 
+                                    QtWidgets.QSizePolicy.Expanding)
         add_pattern_button.setSizePolicy(QtWidgets.QSizePolicy.Expanding, 
                                          QtWidgets.QSizePolicy.Expanding)
         
@@ -180,6 +200,7 @@ class Dashboard(QtWidgets.QGridLayout):
         reset_button.setEnabled(False)
 
         # Button functions...
+        patterns_list.itemSelectionChanged.connect(lambda : selected_pattern_image.draw_pattern(patterns_list.selectedItems()))
         start_button.clicked.connect(lambda : self.start_sim(start_button,
                                                              toggle_button))
         toggle_button.clicked.connect(lambda : self.toggle_sim(toggle_button,
@@ -192,22 +213,24 @@ class Dashboard(QtWidgets.QGridLayout):
         self.addWidget(start_button, *(0, 0, 1, 4))
         self.addWidget(toggle_button, *(1, 0, 1, 1))
         self.addWidget(reset_button, *(1, 1, 1, 3))
-        self.addWidget(patterns_list, *(2, 0, 4, 1))
+        self.addWidget(patterns_list, *(2, 0, 5, 1))
         self.addWidget(selected_pattern_image, *(2, 1, 1, 3))
         self.addWidget(label, *(3, 1, 1, 1))
         self.addWidget(editX, *(3, 2, 1, 1))
         self.addWidget(editY, *(3, 3, 1, 1))
         self.addWidget(reflect_button, *(4, 1, 1, 3))
         self.addWidget(rotate_button, *(5, 1, 1, 3))
-        self.addWidget(add_pattern_button, *(6, 0, 1, 4))
+        self.addWidget(invert_button, *(6, 1, 1, 3))
+        self.addWidget(add_pattern_button, *(7, 0, 1, 4))
 
         self.setRowStretch(0, 1)
         self.setRowStretch(1, 1)
         self.setRowStretch(2, 3)
         self.setRowStretch(3, 1)
-        self.setRowStretch(4, 3)
-        self.setRowStretch(5, 3)
-        self.setRowStretch(6, 1)
+        self.setRowStretch(4, 2)
+        self.setRowStretch(5, 2)
+        self.setRowStretch(6, 2)
+        self.setRowStretch(7, 2)
         self.setColumnStretch(1, 1)
         self.setColumnStretch(2, 1)
         self.setColumnStretch(3, 1)
