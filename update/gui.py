@@ -106,13 +106,9 @@ class PatternImage(QtWidgets.QWidget):
         if not selected_items:
             print("No items selected.")
         else:
+            # Gets selected pattern and updates screen.
             pattern_name = selected_items[0].text()
-            print("Pattern selected: %s" % pattern_name)
-            print("Pattern grid:")
-            print("=========================================")
-            print(PATTERNS[pattern_name])
             self.pattern = PATTERNS[pattern_name]
-            print("=========================================")
             self.update()
 
     def paintEvent(self, event):
@@ -126,13 +122,19 @@ class PatternImage(QtWidgets.QWidget):
             painter.setBrush(QtGui.QColor(R, G, B))
             painter.drawRect(0, 0, width, height)
         else:
-            # Scales pattern to widget and paints to it.
+            # Indicates whether pattern image is square or not.
             pattern = self.pattern
             pattern_height = len(pattern)
             pattern_width = len(pattern[0])
+            if pattern_height > pattern_width:
+                difference = pattern_height - pattern_width
+            elif pattern_height < pattern_width:
+                difference = pattern_width - pattern_height
+
+            # Scales pattern to widget and paints to it.
             pixel_width = width / pattern_width
             pixel_height = height / pattern_height
-            painter.setBrush(QtGui.QColor(100, 0, 0))
+            painter.setBrush(QtGui.QColor(200, 0, 0))
             for row, pixels in enumerate(pattern):
                 for column, pixel in enumerate(pixels):
                     if pixel == LIVING_VAL:
@@ -178,8 +180,8 @@ class Dashboard(QtWidgets.QGridLayout):
         patterns_list = QtWidgets.QListWidget()
         label = QtWidgets.QLabel('Pattern Anchor:')
         label.setAlignment(QtCore.Qt.AlignCenter)
-        editX = QtWidgets.QLineEdit()
-        editY = QtWidgets.QLineEdit()
+        anchor_x = QtWidgets.QLineEdit()
+        anchor_y = QtWidgets.QLineEdit()
         #selected_pattern_image = QtWidgets.QWidget()
         selected_pattern_image = PatternImage()
         start_button = QtWidgets.QPushButton('Start')
@@ -237,8 +239,8 @@ class Dashboard(QtWidgets.QGridLayout):
         self.addWidget(patterns_list, *(2, 0, 5, 1))
         self.addWidget(selected_pattern_image, *(2, 1, 1, 3))
         self.addWidget(label, *(3, 1, 1, 1))
-        self.addWidget(editX, *(3, 2, 1, 1))
-        self.addWidget(editY, *(3, 3, 1, 1))
+        self.addWidget(anchor_x, *(3, 2, 1, 1))
+        self.addWidget(anchor_y, *(3, 3, 1, 1))
         self.addWidget(reflect_button, *(4, 1, 1, 3))
         self.addWidget(rotate_button, *(5, 1, 1, 3))
         self.addWidget(invert_button, *(6, 1, 1, 3))
