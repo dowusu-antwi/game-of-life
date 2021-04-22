@@ -5,7 +5,7 @@ from gui import *
 import time
 
 '''
-Conway's Game of Life Update (Design)
+Conway's Game of Life Update
 
 author: dowusu
 date: March 18th, 2020
@@ -40,12 +40,12 @@ def play():
         grid.update_state()
         grid.render()
 
-def launch():
-    '''
-    Creates launch page GUI, with button taking user to the game.
-    '''
-    launch_page = LaunchPage()
-    game_page = GamePage()
+#def launch():
+#    '''
+#    Creates launch page GUI, with button taking user to the game.
+#    '''
+#    launch_page = LaunchPage()
+#    game_page = GamePage()
 
 if __name__ == "__main__":
     game = Grid(WIDTH, HEIGHT)

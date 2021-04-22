@@ -4,8 +4,8 @@ from PyQt5 import QtWidgets, QtCore, QtGui
 from patterns import PATTERNS
 from random import randint
 
-LIVING_VAL = 1
-DEAD_VAL = 0
+LIVING = 1
+DEAD = 0
 
 class App(QtWidgets.QWidget):
     """
@@ -79,12 +79,12 @@ class GameBoard(QtWidgets.QWidget):
         for column in range(0, grid_width):
             for row in range(0, grid_height):
                 cell_state = self.game.get_state([row, column])
-                if cell_state == LIVING_VAL:
+                if cell_state == LIVING:
                     painter.setBrush(QtGui.QColor(RED, 0, 0))
                     x = column * pixel_width
                     y = row * pixel_height
                     painter.drawRect(x, y, pixel_width, pixel_height)
-                elif cell_state == DEAD_VAL:
+                elif cell_state == DEAD:
                     pass
 
 
@@ -137,7 +137,7 @@ class PatternImage(QtWidgets.QWidget):
             painter.setBrush(QtGui.QColor(200, 0, 0))
             for row, pixels in enumerate(pattern):
                 for column, pixel in enumerate(pixels):
-                    if pixel == LIVING_VAL:
+                    if pixel == LIVING:
                         x = column * pixel_width
                         y = row * pixel_height 
                         painter.drawRect(x, y, pixel_width, pixel_height)
@@ -157,7 +157,7 @@ class Dashboard(QtWidgets.QGridLayout):
         parent_layout.addLayout(self, DASHBOARD_STRETCH)
         self.gameboard = gameboard
         self.timer = self.setup_timer()
-        self.make_grid()
+        self.make_dashboard_grid()
 
     def setup_timer(self):
         '''
@@ -171,7 +171,7 @@ class Dashboard(QtWidgets.QGridLayout):
         timer.timeout.connect(gameboard.update)
         return timer
 
-    def make_grid(self):
+    def make_dashboard_grid(self):
         '''
         Organizes dashboard controls (i.e., buttons, list selectors).
         '''
